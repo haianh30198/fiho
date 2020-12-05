@@ -1,0 +1,123 @@
+{% extends './admin/base.html' %} {% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Thu thập lại dữ liệu</h1>
+    <p class="mb-4">Thu thập lại dữ liệu tự động</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Danh sách các trang web thu thập dữ liệu {% with
+                        messages = get_flashed_messages() %} {% if messages %}
+                        {% for message in messages %}
+                        <span class="text-danger">({{message}})</span>
+                        {% endfor %} {% endif %} {% endwith %}
+                    </h6>
+                </div>
+
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-right">
+                    <form method="post">
+                        <button
+                            type="submit"
+                            class="btn btn-warning btn-icon-split"
+                        >
+                            <span class="icon text-white-50">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </span>
+                            <span class="text"
+                                >Nút này dành để thu thập lại dữ liệu</span
+                            >
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table
+                    class="table table-bordered"
+                    id="dataTable"
+                    width="100%"
+                    cellspacing="0"
+                >
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên website</th>
+                            <th>Địa chỉ website</th>
+                            <th>Thu thập</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên website</th>
+                            <th>Địa chỉ website</th>
+                            <th>Thu thập</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Bất động sản</td>
+                            <td>
+                                <a href="https://batdongsan.com.vn"
+                                    >https://batdongsan.com.vn</a
+                                >
+                            </td>
+                            <td>
+                                <form method="post">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-warning btn-icon-split"
+                                        name="crawl-data"
+                                        value="BDS"
+                                    >
+                                        <span class="icon text-white-50">
+                                            <i
+                                                class="fas fa-exclamation-triangle"
+                                            ></i>
+                                        </span>
+                                        <span class="text">Thu thập lại</span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Bất động sản VN</td>
+                            <td>
+                                <a href="http://batdongsan.vn"
+                                    >http://batdongsan.vn</a
+                                >
+                            </td>
+                            <td>
+                                <form method="post">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-warning btn-icon-split"
+                                        name="crawl-data"
+                                        value="BDSVN"
+                                    >
+                                        <span class="icon text-white-50">
+                                            <i
+                                                class="fas fa-exclamation-triangle"
+                                            ></i>
+                                        </span>
+                                        <span class="text">Thu thập lại</span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

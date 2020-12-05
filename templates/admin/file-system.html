@@ -1,0 +1,79 @@
+{% extends './admin/base.html' %} {% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Dữ liệu hệ thống</h1>
+    <p class="mb-4">Danh sách tất cả các dữ liệu thu thập tự động</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                Dữ liệu thu thập của hệ thống {% with messages =
+                get_flashed_messages() %} {% if messages %} {% for message in
+                messages %}
+                <span class="text-danger">({{message}})</span>
+                {% endfor %} {% endif %} {% endwith %}
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table
+                    class="table table-bordered"
+                    id="dataTable"
+                    width="100%"
+                    cellspacing="0"
+                >
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên tệp</th>
+                            <th>Tên tệp (Vector)</th>
+                            <th>Ngày tạo</th>
+                            <th>Tình trạng</th>
+                            <th>Công cụ</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên tệp</th>
+                            <th>Tên tệp (Vector)</th>
+                            <th>Ngày tạo</th>
+                            <th>Tình trạng</th>
+                            <th>Công cụ</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {%for i in range(0,lenFiles)%}
+                        <tr>
+                            <td>{{files[i][0]}}</td>
+                            <td>{{files[i][1]}}</td>
+                            <td>{{files[i][2]}}</td>
+                            <td>{{files[i][3]}}</td>
+                            <td>
+                                {%if files[i][4] == 1%} Kích hoạt {%else%} Không
+                                kích hoạt {%endif%}
+                            </td>
+                            <td style="display: flex">
+                                <a
+                                    class="btn btn-info btn-circle btn-sm"
+                                    href="/admin/files/system/download/{{files[i][1]}}"
+                                    ><i class="fas fa-file-download"></i></a
+                                >&nbsp;
+                                <a
+                                    class="btn btn-danger btn-circle btn-sm"
+                                    href="/admin/files/system/delete/{{files[i][0]}}"
+                                    ><i class="fas fa-trash"></i
+                                ></a>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

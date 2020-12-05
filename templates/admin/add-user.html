@@ -1,0 +1,88 @@
+{% extends './admin/base.html' %} {% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Thêm thành viên</h1>
+    <p class="mb-4">Thêm 1 quản trị viên cho FIHO</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                Thêm dữ liệu thành viên {% with messages =
+                get_flashed_messages() %} {% if messages %} {% for message in
+                messages %}
+                <span class="text-danger">({{message}})</span>
+                {% endfor %} {% endif %} {% endwith %}
+            </h6>
+        </div>
+        <div class="card-body">
+            <form class="user" method="POST">
+                <div class="form-group">
+                    <input
+                        type="text"
+                        class="form-control form-control-user"
+                        name="username"
+                        id="username"
+                        placeholder="Tên tài khoản"
+                    />
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        <input
+                            type="password"
+                            class="form-control form-control-user"
+                            name="password"
+                            id="password"
+                            placeholder="Mật khẩu"
+                        />
+                    </div>
+                    <div class="col-sm-6">
+                        <input
+                            type="password"
+                            class="form-control form-control-user"
+                            name="password2"
+                            id="password2"
+                            placeholder="Nhập lại mật khẩu"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input
+                        type="text"
+                        class="form-control form-control-user"
+                        name="name"
+                        id="name"
+                        placeholder="Họ và tên"
+                    />
+                </div>
+                <div class="form-group">
+                    <input
+                        type="text"
+                        class="form-control form-control-user"
+                        name="phone"
+                        id="phone"
+                        placeholder="Số điện thoại"
+                    />
+                </div>
+                <div class="form-group">
+                    <input
+                        type="text"
+                        class="form-control form-control-user"
+                        name="address"
+                        id="address"
+                        placeholder="Địa chỉ"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-user btn-block"
+                >
+                    Đăng ký tài khoản
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+{% endblock %}

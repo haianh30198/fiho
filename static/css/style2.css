@@ -1,0 +1,141 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.bg-image {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    filter: blur(7px);
+    background-color: #f6f6f6;
+    background-image: url("http://haianh.ml/z2104758879820_1d116127057e6960d4d07c261d68e817.jpg");
+}
+
+.navbar-brand {
+    font-family: "Notable", sans-serif;
+    line-height: 45px;
+}
+
+.nav-link {
+    color: white !important;
+}
+
+.title-custom {
+    color: white;
+    font-size: 1.9rem;
+}
+
+.container-fuild {
+    margin-right: 13rem;
+    margin-left: 13rem;
+}
+
+.card-wrapper {
+    display: flex;
+}
+
+.card-item {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.title-item {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 1rem;
+}
+
+.card-custom {
+    width: 287px;
+    overflow: hidden;
+}
+
+.image-item {
+    width: 285px;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.single-address {
+    margin: 0 10px;
+    line-height: 50px;
+}
+
+.image-item > img {
+    width: 285px;
+    height: 220px;
+    transition: transform 0.5s, filter 0.5s ease-in-out;
+    transform-origin: center center;
+    filter: brightness(50%);
+}
+
+.card-custom:hover img {
+    filter: brightness(100%);
+    transform: scale(1.1);
+}
+
+.address-item {
+    position: absolute;
+    top: 0;
+    z-index: 99999;
+    color: white;
+    display: none;
+    transition: 0.2s;
+}
+
+.card-custom:hover .address-item {
+    display: block;
+    width: 100%;
+    height: 50px;
+    background-color: transparent;
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, #1d293e 100%);
+}
+
+.info-item {
+    display: flex;
+}
+
+.single-item {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-body-custom {
+    padding: 1rem !important;
+}
+
+.title-map {
+    display: none;
+}
+
+.link-custom {
+    text-decoration: none;
+    color: black;
+}
+
+.link-custom:hover {
+    text-decoration: none;
+    color: black;
+}

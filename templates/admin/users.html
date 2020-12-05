@@ -1,0 +1,84 @@
+{% extends './admin/base.html' %} {% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Thành viên</h1>
+    <p class="mb-4">Danh sách tất cả các quản trị viên của FIHO</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                Dữ liệu thành viên {% with messages = get_flashed_messages() %}
+                {% if messages %} {% for message in messages %}
+                <span class="text-danger">({{message}})</span>
+                {% endfor %} {% endif %} {% endwith %}
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table
+                    class="table table-bordered"
+                    id="dataTable"
+                    width="100%"
+                    cellspacing="0"
+                >
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tài khoản</th>
+                            <th>Họ và tên</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Tình trạng</th>
+                            <th>Công cụ</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tài khoản</th>
+                            <th>Họ và tên</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Tình trạng</th>
+                            <th>Công cụ</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {%for i in range(0,lenUsers)%}
+                        <tr>
+                            <td>{{users[i][0]}}</td>
+                            <td>{{users[i][1]}}</td>
+                            <td>{{users[i][3]}}</td>
+                            <td>{{users[i][4]}}</td>
+                            <td>{{users[i][5]}}</td>
+                            <td>
+                                {%if users[i][6] == 1%} Hoạt động {%else%} {%if
+                                users[i][6] == 0%} Tài khoản Root {%else%} Không
+                                hoạt động {%endif%} {%endif%}
+                            </td>
+                            <td>
+                                <a
+                                    class="btn btn-info btn-circle btn-sm"
+                                    href="/edit/{{users[i][0]}}"
+                                    ><i class="fas fa-info-circle"></i
+                                ></a>
+                                <a
+                                    class="btn btn-danger btn-circle btn-sm"
+                                    href="/admin/users/delete/{{users[i][0]}}"
+                                    ><i class="fas fa-trash"></i
+                                ></a>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

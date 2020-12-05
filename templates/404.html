@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>404 - Trang này không được tìm thấy</title>
+        <!--Google font-->
+        <link
+            href="{{ url_for('static', filename='/404/css2') }}"
+            rel="stylesheet"
+        />
+        <!-- Bootstrap css -->
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="{{ url_for('static', filename='/404/bootstrap.css') }}"
+        />
+        <!-- Theme css -->
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="{{ url_for('static', filename='/404/error-page.css') }}"
+        />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="{{ url_for('static', filename='/404/error-page-responsive.css') }}"
+        />
+    </head>
+    <body>
+        <section class="page-section">
+            <div class="full-width-screen">
+                <div class="container-fluid p-0">
+                    <div class="particles-bg" id="particles-js">
+                        <div class="content-detail">
+                            <h1 class="global-title">
+                                <span>4</span><span>0</span><span>4</span>
+                            </h1>
+
+                            <h4 class="sub-title">Oops!</h4>
+
+                            <p class="detail-text">
+                                Chúng tôi rất xin lỗi,<br />
+                                Trang của bạn muốn truy cập hiện tại không tồn
+                                tại hoặc đang được bảo trì.
+                            </p>
+
+                            <div class="back-btn">
+                                <a href="./" class="btn"
+                                    >Quay lại trang chủ nhé!</a
+                                >
+                            </div>
+                        </div>
+                        <canvas
+                            class="particles-js-canvas-el"
+                            width="1920"
+                            height="979"
+                            style="width: 100%; height: 100%"
+                        ></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- latest jquery-->
+        <script src="{{ url_for('static', filename='/404//jquery-3.5.1.min.js.download') }}"></script>
+        <!-- theme particles script -->
+        <script src="{{ url_for('static', filename='/404//particles.min.js.download') }}"></script>
+        <script src="{{ url_for('static', filename='/404//app.js.download') }}"></script>
+    </body>
+</html>
