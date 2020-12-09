@@ -120,6 +120,7 @@ html {
 .single-item {
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
+    font-size: 15px;
 }
 
 .card-body-custom {

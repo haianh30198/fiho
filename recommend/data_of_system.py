@@ -46,6 +46,8 @@ def createFileData(data_path, vector_data_path):
     dataProcess['District'] = dataProcess['District'].str.replace('Ninh Kiều', '1').str.replace(
         'Cái Răng', '2').str.replace('Bình Thủy', '3').str.replace('Ô Môn', '4').str.replace('Thốt Nốt', '5').str.replace('Vĩnh Thạnh', '6').str.replace('Thới Lai', '7').str.replace('Cờ Đỏ', '8').str.replace('Phong Điền', '9').str.replace('Không rõ', '10')
 
+    dataProcess['Price'] = dataProcess['Price'].replace(',', '.')
+
     # Ép kiểu cho số của quận
     for i in range(len(data.index)):
         dataProcess['District'].values[i] = int(
@@ -57,7 +59,16 @@ def createFileData(data_path, vector_data_path):
     # Chuẩn hóa giá
     priceTemp = []
     for i in dataProcess['Price']:
-        priceTemp.append(i)
+        if(i.find("Triệu/m²") != -1):
+            priceTemp.append(i.replace(i, 'Thỏa thuận'))
+        elif(i.find(",") != -1):
+            priceTemp.append(i.replace(',', '.').replace('Tỷ', 'tỷ'))
+        elif(i.find("Tỷ") != -1):
+            priceTemp.append(i.replace('Tỷ', 'tỷ'))
+        elif(i.find("Triệu") != -1):
+            priceTemp.append(i.replace('Triệu', 'triệu'))
+        else:
+            priceTemp.append(i)
     priceDF = convertPrice(changePrice(priceTemp))
 
     # Chuẩn hóa diện tích

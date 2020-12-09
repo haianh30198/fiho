@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, url_for, render_template, redirect, flash
+from flask import Flask, request, jsonify, url_for, render_template, redirect, flash, send_file
 import pandas as pd
 import sqlite3
 import json
@@ -32,7 +32,7 @@ def format_file_name(name):
     datetime_vietnam = datetime.now(vietnam)
     gio = datetime_vietnam.strftime("%H:%M:%S").split(":")
     ngay = str(datetime_vietnam.date()).split('-')
-    return (name + "_" + gio[0]+gio[1]+gio[2]+"_"+ngay[2]+ngay[1]+ngay[0])
+    return (name + "-" + gio[0]+gio[1]+gio[2]+"-"+ngay[2]+ngay[1]+ngay[0])
 
 # Lọc theo quận
 
@@ -369,6 +369,7 @@ def add_user():
         c = conn.cursor()
 
         # Kiểm tra tài khoản tồn tại
+        checkUsername = "root"
         cursorUsername = c.execute(
             "SELECT username FROM users WHERE username='"+username+"'")
         for i in cursorUsername:
@@ -382,13 +383,6 @@ def add_user():
             flash('Nhập lại mật khẩu không khớp !')
             return redirect(url_for('add_user'))
         else:
-            # # Lấy ra id lớn nhất
-            # queryGetID = "SELECT MAX(ID) FROM users"
-            # cursorID = (conn.cursor()).execute(queryGetID)
-            # for i in cursorID:
-            #     ID = i
-            # ID = ID[0] + 1
-
             params = (str(username), str(password),
                       str(name), str(phone), str(address), str(1))
             cursor = c.execute(
@@ -448,7 +442,7 @@ def detail_file(id):
 
 
 @app.route("/admin/files/system/crawl", methods=['GET', 'POST'])
-def system_crawl_bdsvn():
+def system_crawl():
     if request.method == "POST":
         if request.form['crawl-data'] == "BDS":
             from selenium import webdriver
@@ -718,8 +712,13 @@ def system_crawl_bdsvn():
 
                 conn = sqlite3.connect("./database/fiho.db")
 
+                # Chuyển các tập tin cũ thành hết hạn trước khi thêm vào thêm mới
+                conn.execute(
+                    "UPDATE file_system SET status = 0 WHERE name LIKE '%BatDongSan-%'")
+                conn.commit()
+
                 paramsSys = (str(nameFileBDS),
-                             str(vector_nameFileBDS), str(atCreate), str(0))
+                             str(vector_nameFileBDS), str(atCreate), str(1))
 
                 cursor = conn.execute(
                     "INSERT INTO file_system (name, vector_name, atCreate, status) VALUES (?, ?, ?, ?)", paramsSys)
@@ -782,7 +781,7 @@ def system_crawl_bdsvn():
 
                     driver.get(URL)
 
-                    wait = WebDriverWait(driver, 10)
+                    wait = WebDriverWait(driver, 30)
 
                     # Lấy cha của các items
                     lists = wait.until(
@@ -825,12 +824,12 @@ def system_crawl_bdsvn():
                                     (By.CLASS_NAME, "warp_images"))
                             )
 
-                            images = imageHouse.find_elements_by_class_name(
-                                'owl-stage')
+                            images = imageHouse.find_elements_by_css_selector(
+                                '.slider-avatar .slider .owl-stage-outer .owl-stage')
 
                             for image in images:
                                 link = image.find_element_by_css_selector(
-                                    'div a')
+                                    '.owl-item .box-banner-img .changemedia')
                                 links = link.get_attribute('href')
                                 linkImages.append(links)
 
@@ -846,7 +845,7 @@ def system_crawl_bdsvn():
                         try:
                             wrapTitle = WebDriverWait(driver, 30).until(
                                 EC.presence_of_element_located(
-                                    (By.ID, "Home1_ctl33_viewdetailproduct"))
+                                    (By.CSS_SELECTOR, "#Home1_ctl33_viewdetailproduct .PD_Product .Product_List .wrap"))
                             )
                             titleHome = wrapTitle.find_element_by_css_selector(
                                 '.P_Title1 h1')
@@ -999,8 +998,13 @@ def system_crawl_bdsvn():
 
                 conn = sqlite3.connect("./database/fiho.db")
 
+                # Chuyển các tập tin cũ thành hết hạn trước khi thêm vào thêm mới
+                conn.execute(
+                    "UPDATE file_system SET status = 0 WHERE name LIKE '%BatDongSanVN-%'")
+                conn.commit()
+
                 paramsSys = (str(nameFileBDSVN),
-                             str(vector_nameFileBDSVN), str(atCreate), str(0))
+                             str(vector_nameFileBDSVN), str(atCreate), str(1))
 
                 cursor = conn.execute(
                     "INSERT INTO file_system (name, vector_name, atCreate, status) VALUES (?, ?, ?, ?)", paramsSys)
@@ -1038,6 +1042,61 @@ def system_detele(id):
     # conn.close()
     flash('Xóa tệp hệ thống thành công !')
     return redirect(url_for('file_system'))
+
+
+@app.route("/admin/files/system/download/<filename>", methods=['GET'])
+def download_file(filename):
+    path = "data/rawSystem/"+filename
+    return send_file(path, as_attachment=True)
+
+
+@app.route("/admin/files/system/active")
+def system_active():
+    try:
+        # Mảng chứa các đường link file dữ liệu
+        fileAll = []
+
+        # Kết nôi CSDL
+        conn = sqlite3.connect("./database/fiho.db")
+        query = "SELECT name FROM file_system WHERE status = 1"
+        cursor = conn.execute(query)
+        for filesName in cursor:
+            fileAll.append(filesName)  # file gốc
+        conn.commit()
+        conn.close()
+
+        # Mảng chứa các dataframe sau khi đọc
+        rawFiles = []
+
+        for files in fileAll:
+            rawFiles.append(pd.read_csv(files[0]))
+
+        # Nối tất cả các file trong mảng lại
+        mergeRawFiles = pd.concat(rawFiles, sort=False, ignore_index=True)
+
+        # Loại bỏ các nhà trùng nhau
+        mergeRawFiles = mergeRawFiles.drop_duplicates(
+            subset=['Title', 'Price', 'Area', 'Phone'], keep='first').reset_index(drop=True)
+
+        # Tạo tên cho tập gợi mới
+        nameRecommend = './data/raw/' + \
+            format_file_name('recommned')+'.csv'
+        nameVectorRecommend = './data/vector/' + \
+            format_file_name('recommned')+'.csv'
+
+        # Lưu thành file csv cho thập dữ liệu
+        mergeRawFiles.to_csv(nameRecommend, index=False,
+                             header=True, encoding='utf-8-sig')
+
+        # Tạo file vector
+        createFileData(nameRecommend, nameVectorRecommend)
+
+        flash('Đã khởi tạo lại tập dữ liệu gợi ý cho hệ thống!')
+        return redirect(url_for('admin'))
+    except:
+        flash('Chưa có file nào được sử dụng!')
+        return redirect(url_for('file_system'))
+
 # File được thêm bởi QTV
 
 
@@ -1056,6 +1115,13 @@ def file_addition():
 @app.route("/admin/files/addition/add")  # Hiện thị file
 def add_file_addition():
     return render_template('admin/add-file-addition.html')
+
+# Đánh giá hệ Thống
+
+
+@app.route("/rating")
+def rating():
+    return render_template('rating.html')
 
 
 if __name__ == "__main__":

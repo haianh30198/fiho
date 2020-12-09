@@ -3,7 +3,12 @@
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        <h1 class="h3 mb-0 text-gray-800">
+            Dashboard {% with messages = get_flashed_messages() %} {% if
+            messages %} {% for message in messages %}
+            <span class="text-danger">({{message}})</span>
+            {% endfor %} {% endif %} {% endwith %}
+        </h1>
         <a
             href="#"
             class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
@@ -29,7 +34,7 @@
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
@@ -52,9 +57,7 @@
                             </div>
                         </div>
                         <div class="col-auto">
-                            <i
-                                class="fas fa-dollar-sign fa-2x text-gray-300"
-                            ></i>
+                            <i class="fas fa-home fa-2x text-gray-300"></i>
                         </div>
                     </div>
                 </div>
