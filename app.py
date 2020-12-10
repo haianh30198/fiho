@@ -11,18 +11,45 @@ from recommend.convert_5_properties import priority
 from recommend.places_nearby import locationFromAddress
 from recommend.data_of_system import createFileData
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'data/rawAddition/'
+ALLOWED_EXTENSIONS = {'xlxs', 'csv'}
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 CORS(app)
 
+# Giá trị mặc định
 # Dữ liệu để gợi ý
 dataRaw = pd.read_csv("./data/raw/BDSraw.csv")
 # Dữ liệu để tính sim
 system = pd.read_csv("./data/vector/BDSvector.csv")
 # location
 location = pd.read_csv('./data/location/location.csv')
-# Lọc dữ liệu theo quận
+
+try:
+    # Lấy thông tin dữ liệu gợi ý chính
+    conn = sqlite3.connect("./database/fiho.db")
+    fileRecommendQuery = "SELECT name, vector_name, location FROM file_recommend WHERE ID = (SELECT MAX(ID) FROM file_recommend)"
+    fileRecommendCursor = conn.execute(fileRecommendQuery)
+
+    for fileRecommend in fileRecommendCursor:
+        # Dữ liệu để gợi ý
+        dataRaw = pd.read_csv(fileRecommend[0])
+        # Dữ liệu để tính sim
+        system = pd.read_csv(fileRecommend[1])
+        # location
+        location = pd.read_csv(fileRecommend[2])
+    conn.close()
+except:
+    # Dữ liệu để gợi ý
+    dataRaw = pd.read_csv("./data/raw/BDSraw.csv")
+    # Dữ liệu để tính sim
+    system = pd.read_csv("./data/vector/BDSvector.csv")
+    # location
+    location = pd.read_csv('./data/location/location.csv')
 
 # Định dạng tên file
 
@@ -155,6 +182,8 @@ def index():
             print(tabulate(rs[['Title', 'Price', 'Area', 'Bedrooms', 'Floors', 'Direction', 'Similar']], headers=[
                 '#', 'Tiêu đề bán nhà', 'Giá', 'Diện tích', 'Phòng ngủ', 'Tầng', 'Hướng', 'ĐTT'], tablefmt="grid"))
             print("\n========================================================================END - TOP 5 GỢI Ý TỐT NHẤT========================================================================\n")
+
+            # Chuyển dataframe thành dạng list để hiện thị ra giao diện
             data = rs.values.tolist()
 
             lenData = len(data)
@@ -708,7 +737,7 @@ def system_crawl():
                 vietnam = pytz.timezone('Asia/Ho_Chi_Minh')
                 timeA = datetime.now(vietnam).strftime("%H:%M:%S")
                 timeB = datetime.now(vietnam).date()
-                atCreate = str(timeA) + " " + str(timeB)
+                atCreate = str(timeB) + " " + str(timeA)
 
                 conn = sqlite3.connect("./database/fiho.db")
 
@@ -994,7 +1023,7 @@ def system_crawl():
                 vietnam = pytz.timezone('Asia/Ho_Chi_Minh')
                 timeA = datetime.now(vietnam).strftime("%H:%M:%S")
                 timeB = datetime.now(vietnam).date()
-                atCreate = str(timeA) + " " + str(timeB)
+                atCreate = str(timeB) + " " + str(timeA)
 
                 conn = sqlite3.connect("./database/fiho.db")
 
@@ -1049,53 +1078,85 @@ def download_file(filename):
     path = "data/rawSystem/"+filename
     return send_file(path, as_attachment=True)
 
+# Kích hoạt tạo file gợi ý mới bằng cách thủ công
+
 
 @app.route("/admin/files/system/active")
 def system_active():
-    try:
-        # Mảng chứa các đường link file dữ liệu
-        fileAll = []
+    # try:
+    # Mảng chứa các đường link file dữ liệu
+    rawfileAll = []
+    vetorFileAll = []
 
-        # Kết nôi CSDL
-        conn = sqlite3.connect("./database/fiho.db")
-        query = "SELECT name FROM file_system WHERE status = 1"
-        cursor = conn.execute(query)
-        for filesName in cursor:
-            fileAll.append(filesName)  # file gốc
-        conn.commit()
-        conn.close()
+    # Kết nôi CSDL
+    conn = sqlite3.connect("./database/fiho.db")
+    # Select file hệ thống
+    querySystem = "SELECT name, vector_name FROM file_system WHERE status = 1"
+    cursorSystem = conn.execute(querySystem)
+    # Select file admin thêm vào
+    queryAdmin = "SELECT name, vector_name FROM file_addition WHERE status = 1"
+    cursorAdmin = conn.execute(queryAdmin)
 
-        # Mảng chứa các dataframe sau khi đọc
-        rawFiles = []
+    for filesNameSystem in cursorSystem:
+        rawfileAll.append(pd.read_csv(filesNameSystem[0]))  # file gốc
+        vetorFileAll.append(pd.read_csv(filesNameSystem[1]))  # file gốc
 
-        for files in fileAll:
-            rawFiles.append(pd.read_csv(files[0]))
+    for filesNameAdmin in cursorAdmin:
+        rawfileAll.append(pd.read_csv(filesNameAdmin[0]))  # file gốc
+        vetorFileAll.append(pd.read_csv(filesNameAdmin[1]))  # file gốc
 
-        # Nối tất cả các file trong mảng lại
-        mergeRawFiles = pd.concat(rawFiles, sort=False, ignore_index=True)
+    # Nối tất cả các file trong mảng lại
+    mergeRawFiles = pd.concat(rawfileAll, sort=False, ignore_index=True)
+    mergeVectorFiles = pd.concat(
+        vetorFileAll, sort=False, ignore_index=True)
 
-        # Loại bỏ các nhà trùng nhau
-        mergeRawFiles = mergeRawFiles.drop_duplicates(
-            subset=['Title', 'Price', 'Area', 'Phone'], keep='first').reset_index(drop=True)
+    # Lấy vĩ độ kinh độ từ địa chỉ nhà tạo ra map
+    createMap = []
+    for add in mergeRawFiles['Address']:
+        latitude, longitude = locationFromAddress(add)
+        createMap.append([longitude, latitude])
 
-        # Tạo tên cho tập gợi mới
-        nameRecommend = './data/raw/' + \
-            format_file_name('recommned')+'.csv'
-        nameVectorRecommend = './data/vector/' + \
-            format_file_name('recommned')+'.csv'
+    # Chuyển thành dataframe
+    dfCreateMap = pd.DataFrame(createMap, columns=['kinhdo', 'vido'])
 
-        # Lưu thành file csv cho thập dữ liệu
-        mergeRawFiles.to_csv(nameRecommend, index=False,
-                             header=True, encoding='utf-8-sig')
+    # Tạo tên cho tập gợi mới
+    nameRecommend = './data/raw/' + \
+        format_file_name('recommned')+'.csv'
+    nameVectorRecommend = './data/vector/' + \
+        format_file_name('recommned')+'.csv'
+    mapRecommend = './data/location/' + \
+        format_file_name('location')+'.csv'
 
-        # Tạo file vector
-        createFileData(nameRecommend, nameVectorRecommend)
+    # Lưu thành file csv cho thập dữ liệu
+    mergeRawFiles.to_csv(nameRecommend, index=False,
+                         header=True, encoding='utf-8-sig')
+    mergeVectorFiles.to_csv(nameVectorRecommend, index=False,
+                            header=True, encoding='utf-8-sig')
+    dfCreateMap.to_csv(mapRecommend, index=False,
+                       header=True, encoding='utf-8-sig')
 
-        flash('Đã khởi tạo lại tập dữ liệu gợi ý cho hệ thống!')
-        return redirect(url_for('admin'))
-    except:
-        flash('Chưa có file nào được sử dụng!')
-        return redirect(url_for('file_system'))
+    vietnam = pytz.timezone('Asia/Ho_Chi_Minh')
+    timeA = datetime.now(vietnam).strftime("%H:%M:%S")
+    timeB = datetime.now(vietnam).date()
+    atCreate = str(timeB) + " " + str(timeA)
+
+    # Chuyển các tập tin cũ thành hết hạn trước khi thêm vào thêm mới
+    conn.execute("UPDATE file_recommend SET status = 0")
+    conn.commit()
+
+    paramsSys = (str(nameRecommend),
+                 str(nameVectorRecommend), str(mapRecommend), str(atCreate), str(1))
+
+    cursor = conn.execute(
+        "INSERT INTO file_recommend (name, vector_name, location, atCreate, status) VALUES (?, ?, ?, ?, ?)", paramsSys)
+    conn.commit()
+    conn.close()
+
+    flash('Đã khởi tạo lại tập dữ liệu gợi ý cho hệ thống!')
+    return redirect(url_for('admin'))
+    # except:
+    #     flash('Chưa có file nào được sử dụng!')
+    #     return redirect(url_for('file_addition'))
 
 # File được thêm bởi QTV
 
@@ -1111,17 +1172,71 @@ def file_addition():
     conn.close()
     return render_template('admin/file-addition.html', files=files, lenFiles=len(files))
 
+# Upload file
 
-@app.route("/admin/files/addition/add")  # Hiện thị file
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route("/admin/files/addition/add", methods=['GET', 'POST'])
 def add_file_addition():
+    if request.method == 'POST':
+        # Lấy trạng thái file khi upload
+        active = request.form.get('active')
+
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('Đã có lỗi xảy ra! Thử lại sau !')
+            return redirect(url_for('add_file_addition'))
+        file = request.files['file']
+        if allowed_file(file.filename) != True:
+            flash('Tệp sai định dạng!')
+            return redirect(url_for('add_file_addition'))
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('Không có tệp nào được chọn!')
+            return redirect(url_for('add_file_addition'))
+        if file and allowed_file(file.filename):
+
+            nameFile = format_file_name('admin-file-upload')+'.csv'
+            nameFileADMIN = './data/rawAddition/' + nameFile
+
+            filename = nameFile
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # lưu thông tin file vừa up lên cơ sở dữ liệu
+            vector_nameFileADMIN = './data/vectorAddition/' + \
+                format_file_name('admin-vector-file-upload')+'.csv'
+
+            # Tạo file vector data từ file raw data đã up
+            createFileData(nameFileADMIN, vector_nameFileADMIN)
+
+            vietnam = pytz.timezone('Asia/Ho_Chi_Minh')
+            timeA = datetime.now(vietnam).strftime("%H:%M:%S")
+            timeB = datetime.now(vietnam).date()
+            atCreate = str(timeB) + " " + str(timeA)
+
+            conn = sqlite3.connect("./database/fiho.db")
+
+            if(active == "1"):
+                paramsSys = (str(nameFileADMIN),
+                             str(vector_nameFileADMIN), str(atCreate), str(1))
+            else:
+                paramsSys = (str(nameFileADMIN),
+                             str(vector_nameFileADMIN), str(atCreate), str(0))
+
+            cursor = conn.execute(
+                "INSERT INTO file_addition (name, vector_name, atCreate, status) VALUES (?, ?, ?, ?)", paramsSys)
+            conn.commit()
+            conn.close()
+
+            flash('Đã tải lên thành công!')
+            return redirect(url_for('add_file_addition'))
+
     return render_template('admin/add-file-addition.html')
-
-# Đánh giá hệ Thống
-
-
-@app.route("/rating")
-def rating():
-    return render_template('rating.html')
 
 
 if __name__ == "__main__":

@@ -125,6 +125,7 @@ html {
 
 .card-body-custom {
     padding: 1rem !important;
+    min-height: 150px !important;
 }
 
 .title-map {

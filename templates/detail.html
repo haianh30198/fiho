@@ -20,13 +20,17 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active" id="images-active">
-                <img src="{{detail[8].split(',')[0].split("'")[1]}}"
+                <img src="{%if detail[8]|length < 3 %}
+                https://staticfile.batdongsan.com.vn/images/no-image.png
+                {%else%} {{detail[8].split(',')[0].split("'")[1]}} {%endif%}"
                 class="d-block w-100"
                 alt="{{detail[8].split(',')[0].split("'")[1]}}" height="340px"
                 />
             </div>
             <div class="carousel-item" id="images">
-                <img src="{{detail[8].split(',')[0].split("'")[1]}}"
+                <img src="{%if detail[8]|length < 3 %}
+                https://staticfile.batdongsan.com.vn/images/no-image.png
+                {%else%} {{detail[8].split(',')[0].split("'")[1]}} {%endif%}"
                 class="d-block w-100"
                 alt="{{detail[8].split(',')[0].split("'")[1]}}" height="340px"
                 />
