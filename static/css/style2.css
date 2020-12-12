@@ -11,7 +11,7 @@ body {
     width: 100%;
     position: absolute;
     filter: blur(7px);
-    background-color: #f6f6f6;
+    background-color: #000;
     background-image: url("http://haianh.ml/z2104758879820_1d116127057e6960d4d07c261d68e817.jpg");
 }
 
@@ -36,11 +36,7 @@ body {
 
 .card-wrapper {
     display: flex;
-}
-
-.card-item {
-    margin-left: 5px;
-    margin-right: 5px;
+    justify-content: space-evenly;
 }
 
 /* Sticky footer styles
@@ -67,12 +63,12 @@ html {
 }
 
 .card-custom {
-    width: 287px;
+    width: 288px;
     overflow: hidden;
 }
 
 .image-item {
-    width: 285px;
+    width: 288px;
     height: 200px;
     overflow: hidden;
     position: relative;
@@ -81,10 +77,11 @@ html {
 .single-address {
     margin: 0 10px;
     line-height: 50px;
+    font-size: 15px;
 }
 
 .image-item > img {
-    width: 285px;
+    width: 286px;
     height: 220px;
     transition: transform 0.5s, filter 0.5s ease-in-out;
     transform-origin: center center;
@@ -115,10 +112,11 @@ html {
 
 .info-item {
     display: flex;
+    justify-content: space-evenly;
 }
 
 .single-item {
-    margin-right: 0.5rem;
+    /* margin-right: 0.5rem; */
     margin-bottom: 0.5rem;
     font-size: 15px;
 }
@@ -126,10 +124,7 @@ html {
 .card-body-custom {
     padding: 1rem !important;
     min-height: 150px !important;
-}
-
-.title-map {
-    display: none;
+    height: 150px;
 }
 
 .link-custom {
@@ -141,3 +136,20 @@ html {
     text-decoration: none;
     color: black;
 }
+
+.tooltip {
+    z-index: 99999;
+}
+
+.hide-warning {
+    display: none;
+}
+
+/* .save-btn {
+    position: absolute;
+    bottom: 157px;
+    right: 6px;
+    z-index: 2;
+    background: none;
+    border: none;
+} */

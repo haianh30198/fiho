@@ -4,6 +4,7 @@ import sqlite3
 import json
 import os
 from datetime import datetime
+from tabulate import tabulate
 import pytz
 from sklearn.metrics.pairwise import cosine_similarity
 from recommend.data_of_user import newData
@@ -124,6 +125,10 @@ def recommend(district, price, priceUp, area, areaUp, bedrooms, bedroomsUp, floo
     dataResult = dataResult.reset_index()
     del dataResult['index']
 
+    # Loại bỏ phần tử lập
+    dataResult = dataResult.drop_duplicates(
+        subset=['Title', 'Price', 'Area', 'Phone'], keep='first').reset_index(drop=True)
+
     return dataResult.head()
 
 
@@ -135,23 +140,6 @@ def page_not_found(e):
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    result = "map"
-    data = "empty"
-    lenData = 0
-    warning = "p hidden"
-    titleMap = ""
-    district = 1
-    price = 0
-    priceUp = 1
-    floors = 0
-    floorsUp = 1
-    area = 0
-    areaUp = 1
-    bedrooms = 0
-    bedroomsUp = 1
-    direction = 0
-    directionUp = 1
-    placesNearby = "Nhà hàng, quán cà phê, công viên"
     locationAll = []
 
     for i in range(0, len(location.index)):
@@ -159,186 +147,48 @@ def index():
 
     lengthLocation = len(locationAll)
 
-    if(request.method == 'POST'):
-        district = request.form.get('district')
-        price = request.form.get('price')
-        priceUp = request.form.get('priceUp')
-        area = request.form.get('area')
-        areaUp = request.form.get('areaUp')
-        floors = request.form.get('floors')
-        floorsUp = request.form.get('floorsUp')
-        bedrooms = request.form.get('bedrooms')
-        bedroomsUp = request.form.get('bedroomsUp')
-        direction = request.form.get('direction')
-        directionUp = request.form.get('directionUp')
-        placesNearby = request.form.get('placesNearby')
+    return render_template('index2.html', locationAll=locationAll, lengthLocation=lengthLocation, dataRaw=dataRaw.values.tolist())
 
-        print(placesNearby)
-        from tabulate import tabulate
-        try:
-            rs = recommend(int(district), int(price), int(priceUp), float(area), int(areaUp), int(bedrooms), int(
-                bedroomsUp), int(floors), int(floorsUp), int(direction), int(directionUp), placesNearby)
-            print("===========================================================================TOP 5 GỢI Ý TỐT NHẤT===========================================================================\n")
-            print(tabulate(rs[['Title', 'Price', 'Area', 'Bedrooms', 'Floors', 'Direction', 'Similar']], headers=[
-                '#', 'Tiêu đề bán nhà', 'Giá', 'Diện tích', 'Phòng ngủ', 'Tầng', 'Hướng', 'ĐTT'], tablefmt="grid"))
-            print("\n========================================================================END - TOP 5 GỢI Ý TỐT NHẤT========================================================================\n")
 
-            # Chuyển dataframe thành dạng list để hiện thị ra giao diện
-            data = rs.values.tolist()
+@app.route('/result', methods=['GET', 'POST'])
+def signUpUser():
+    data = 0
+    lenData = 0
+    warning = "hide-warning"
+    resultWarning = ""
+    district = request.form.get('district')
+    price = request.form.get('price')
+    priceUp = request.form.get('priceUp')
+    area = request.form.get('area')
+    areaUp = request.form.get('areaUp')
+    floors = request.form.get('floors')
+    floorsUp = request.form.get('floorsUp')
+    bedrooms = request.form.get('bedrooms')
+    bedroomsUp = request.form.get('bedroomsUp')
+    direction = request.form.get('direction')
+    directionUp = request.form.get('directionUp')
+    placesNearby = request.form.get('placesNearby')
 
-            lenData = len(data)
+    # print(placesNearby)
+    try:
+        rs = recommend(int(district), int(price), int(priceUp), float(area), int(areaUp), int(bedrooms), int(
+            bedroomsUp), int(floors), int(floorsUp), int(direction), int(directionUp), placesNearby)
+        print("===========================================================================TOP 5 GỢI Ý TỐT NHẤT===========================================================================\n")
+        print(tabulate(rs[['Title', 'Price', 'Area', 'Bedrooms', 'Floors', 'Direction', 'Similar']], headers=[
+            '#', 'Tiêu đề bán nhà', 'Giá', 'Diện tích', 'Phòng ngủ', 'Tầng', 'Hướng', 'ĐTT'], tablefmt="grid"))
+        print("\n========================================================================END - TOP 5 GỢI Ý TỐT NHẤT========================================================================\n")
 
-            result = "empty"
-            titleMap = "title-map"
-        except:
-            warning = "script"
+        # Chuyển dataframe thành dạng list để hiện thị ra giao diện
+        data = rs.values.tolist()
 
-    # Lưu giá trị khi submit
-    districtSelected = ""
+        lenData = len(data)
+        # print(lenData)
 
-    if(district == '1'):
-        districtSelected = 0
-    if(district == '2'):
-        districtSelected = 1
-    if(district == '3'):
-        districtSelected = 2
-    if(district == '4'):
-        districtSelected = 3
-    if(district == '5'):
-        districtSelected = 4
-    if(district == '6'):
-        districtSelected = 5
-    if(district == '7'):
-        districtSelected = 6
-    if(district == '8'):
-        districtSelected = 7
-    if(district == '9'):
-        districtSelected = 8
+    except:
+        warning = ""
+        resultWarning = "hide-warning"
 
-    areaSelected = ""
-
-    if(area == '0'):
-        areaSelected = 0
-    if(area == '25'):
-        areaSelected = 1
-    if(area == '40'):
-        areaSelected = 2
-    if(area == '60'):
-        areaSelected = 3
-    if(area == '85'):
-        areaSelected = 4
-    if(area == '125'):
-        areaSelected = 5
-    if(area == '175'):
-        areaSelected = 6
-    if(area == '250'):
-        areaSelected = 7
-    if(area == '350'):
-        areaSelected = 8
-    if(area == '750'):
-        areaSelected = 9
-    if(area == '1200'):
-        areaSelected = 10
-
-    priceSelected = ""
-
-    if(price == '0'):
-        priceSelected = 0
-    if(price == '250000000'):
-        priceSelected = 1
-    if(price == '650000000'):
-        priceSelected = 2
-    if(price == '900000000'):
-        priceSelected = 3
-    if(price == '2000000000'):
-        priceSelected = 4
-    if(price == '4000000000'):
-        priceSelected = 5
-    if(price == '6000000000'):
-        priceSelected = 6
-    if(price == '8500000000'):
-        priceSelected = 7
-    if(price == '15000000000'):
-        priceSelected = 8
-    if(price == '25000000000'):
-        priceSelected = 9
-    if(price == '50000000000'):
-        priceSelected = 10
-
-    floorsSelected = ""
-
-    if(floors == '0'):
-        floorsSelected = 0
-    if(floors == '1'):
-        floorsSelected = 1
-    if(floors == '2'):
-        floorsSelected = 2
-    if(floors == '3'):
-        floorsSelected = 3
-    if(floors == '4'):
-        floorsSelected = 4
-    if(floors == '5'):
-        floorsSelected = 5
-    if(floors == '6'):
-        floorsSelected = 6
-    if(floors == '7'):
-        floorsSelected = 7
-    if(floors == '8'):
-        floorsSelected = 8
-    if(floors == '9'):
-        floorsSelected = 9
-    if(floors == '10'):
-        floorsSelected = 10
-
-    bedroomsSelected = ""
-
-    if(bedrooms == '0'):
-        bedroomsSelected = 0
-    if(bedrooms == '1'):
-        bedroomsSelected = 1
-    if(bedrooms == '2'):
-        bedroomsSelected = 2
-    if(bedrooms == '3'):
-        bedroomsSelected = 3
-    if(bedrooms == '4'):
-        bedroomsSelected = 4
-    if(bedrooms == '5'):
-        bedroomsSelected = 5
-    if(bedrooms == '6'):
-        bedroomsSelected = 6
-    if(bedrooms == '7'):
-        bedroomsSelected = 7
-    if(bedrooms == '8'):
-        bedroomsSelected = 8
-    if(bedrooms == '9'):
-        bedroomsSelected = 9
-    if(bedrooms == '10'):
-        bedroomsSelected = 10
-
-    directionSelected = ""
-
-    if(direction == '0'):
-        directionSelected = 0
-    if(direction == '1'):
-        directionSelected = 1
-    if(direction == '2'):
-        directionSelected = 2
-    if(direction == '3'):
-        directionSelected = 3
-    if(direction == '4'):
-        directionSelected = 4
-    if(direction == '5'):
-        directionSelected = 5
-    if(direction == '6'):
-        directionSelected = 6
-    if(direction == '7'):
-        directionSelected = 7
-    if(direction == '8'):
-        directionSelected = 8
-
-    # END - Lưu giá trị khi submit
-
-    return render_template('index2.html', result=result, locationAll=locationAll, lengthLocation=lengthLocation, data=data, lenData=lenData, warning=warning, district=int(district), price=int(price), dataRaw=dataRaw.values.tolist(), districtSelected=districtSelected, areaSelected=areaSelected, priceSelected=priceSelected, floorsSelected=floorsSelected, bedroomsSelected=bedroomsSelected, directionSelected=directionSelected, priceUp=priceUp, areaUp=areaUp, floorsUp=floorsUp, bedroomsUp=bedroomsUp, directionUp=directionUp, placesNearby=placesNearby, titleMap=titleMap)
+    return render_template('result.html', warning=warning, resultWarning=resultWarning, lenData=lenData, data=data)
 
 
 @app.route("/detail/<id>")
@@ -515,7 +365,7 @@ def system_crawl():
             }
 
             MIN_PAGE = 1
-            MAX_PAGE = 1
+            MAX_PAGE = 17
 
             try:
                 for page in range(MIN_PAGE, MAX_PAGE + 1):
@@ -533,22 +383,33 @@ def system_crawl():
                         )
                     )
 
-                    # Chạy qua các item lấy title của các item
-                    items = lists.find_elements_by_class_name('product-item')
+                    # # Chạy qua các item lấy title của các item
+                    # items = lists.find_elements_by_class_name('product-item')
+                    # for item in items:
+                    #     # title = item.find_element_by_class_name('wrap-plink')
+                    #     # titles.append(title.text)
+                    #     titles.append(item.get_attribute('prid'))
+
+                    # Chạy qua các item lấy link của các item
+                    items = lists.find_elements_by_css_selector(
+                        '.product-item .wrap-plink')
                     for item in items:
                         # title = item.find_element_by_class_name('wrap-plink')
                         # titles.append(title.text)
-                        titles.append(item.get_attribute('prid'))
+                        titles.append(item.get_attribute('href'))
 
                     count = 1
                     # Chạy qua các title và click vào trang tương ứng
                     for title in titles:
-                        element = wait.until(
-                            EC.presence_of_element_located(
-                                (By.XPATH, "//div[@prid='"+title+"']"))
-                        )
+                        # element = wait.until(
+                        #     EC.presence_of_element_located(
+                        #         (By.XPATH, "//div[@prid='"+title+"']"))
+                        # )
 
-                        element.click()
+                        # element.click()
+                        print(title)
+
+                        driver.get(title)
 
                         # Tạo ID
                         id = uuid.uuid4()
@@ -746,8 +607,8 @@ def system_crawl():
                     "UPDATE file_system SET status = 0 WHERE name LIKE '%BatDongSan-%'")
                 conn.commit()
 
-                paramsSys = (str(nameFileBDS),
-                             str(vector_nameFileBDS), str(atCreate), str(1))
+                paramsSys = (str(nameFileBDS), str(
+                    vector_nameFileBDS), str(atCreate), str(1))
 
                 cursor = conn.execute(
                     "INSERT INTO file_system (name, vector_name, atCreate, status) VALUES (?, ?, ?, ?)", paramsSys)
@@ -797,7 +658,7 @@ def system_crawl():
             }
 
             MIN_PAGE = 1
-            MAX_PAGE = 1
+            MAX_PAGE = 3
 
             URL = "http://www.batdongsan.vn/default.aspx?removedos=true"
 

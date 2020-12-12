@@ -113,18 +113,23 @@
                     <tr>
                         <th class="table-size" scope="row">Số phòng ngủ:</th>
                         <td id="bedrooms">
-                            <!-- {%if detail[4] is defined%}Chưa xác
-                            định{%else%}{{detail[4]}}{%endif%} -->
-                            {{detail[4]}}
+                            {%if detail[4] is defined%}Chưa xác
+                            định{%else%}{{detail[4]}}{%endif%}
                         </td>
                     </tr>
                     <tr>
                         <th class="table-size" scope="row">Số tầng:</th>
-                        <td id="floors">{{detail[5]}}</td>
+                        <td id="floors">
+                            {%if detail[4] is defined%}Chưa xác
+                            định{%else%}{{detail[5]}}{%endif%}
+                        </td>
                     </tr>
                     <tr>
                         <th class="table-size" scope="row">Hướng:</th>
-                        <td id="direction">{{detail[6]}}</td>
+                        <td id="direction">
+                            {%if detail[4] is defined%}Chưa xác
+                            định{%else%}{{detail[6]}}{%endif%}
+                        </td>
                     </tr>
                     <tr>
                         <th class="table-size" scope="row">Địa chỉ:</th>

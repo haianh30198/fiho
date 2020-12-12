@@ -115,56 +115,95 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <span class="title-custom"
-                        >Ngôi nhà bạn mong muốn là gì?</span
+                        >Ngôi nhà bạn mong muốn là gì? 🤔</span
                     >
                     <div class="card card-item mt-3">
                         <div class="card-body">
                             <form method="post">
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
-                                        <label class="font-weight-bold" for="district">Quận</label>
+                                        <label
+                                            class="font-weight-bold"
+                                            for="district"
+                                            >Quận</label
+                                        >
                                         <select
                                             class="form-control"
                                             name="district"
                                             id="district"
                                         >
-                                            <option {%if districtSelected == 0%}selected{%endif%} value="1">Ninh Kiều</option>
-                                            <option {%if districtSelected == 1%}selected{%endif%} value="2">Cái Răng</option>
-                                            <option {%if districtSelected == 2%}selected{%endif%} value="3">Bình Thủy</option>
-                                            <option {%if districtSelected == 3%}selected{%endif%} value="4">Ô Môn</option>
-                                            <option {%if districtSelected == 4%}selected{%endif%} value="5">Thốt Nốt</option>
-                                            <option {%if districtSelected == 5%}selected{%endif%} value="6">Vĩnh Thạnh</option>
-                                            <option {%if districtSelected == 6%}selected{%endif%} value="7">Thới Lai</option>
-                                            <option {%if districtSelected == 7%}selected{%endif%} value="8">Cờ Đỏ</option>
-                                            <option {%if districtSelected == 8%}selected{%endif%} value="9">Phong Điền</option>
+                                            <option value="1">Ninh Kiều</option>
+                                            <option value="2">Cái Răng</option>
+                                            <option value="3">Bình Thủy</option>
+                                            <option value="4">Ô Môn</option>
+                                            <option value="5">Thốt Nốt</option>
+                                            <option value="6">
+                                                Vĩnh Thạnh
+                                            </option>
+                                            <option value="7">Thới Lai</option>
+                                            <option value="8">Cờ Đỏ</option>
+                                            <option value="9">
+                                                Phong Điền
+                                            </option>
                                         </select>
                                         <small class="form-text text-muted"
                                             >Hiện tại chúng tôi chỉ hỗ trợ các
-                                            quận huyện ở thành phố Cần Thơ.</small
+                                            quận huyện ở thành phố Cần
+                                            Thơ.</small
                                         >
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label class="font-weight-bold" for="price">Giá</label>
+                                        <label
+                                            class="font-weight-bold"
+                                            for="price"
+                                            >Giá</label
+                                        >
                                         <select
                                             class="form-control"
                                             id="price"
                                             name="price"
                                         >
-                                            <option {%if priceSelected == 0%}selected{%endif%} value="0">Thỏa thuận</option>
-                                            <option {%if priceSelected == 1%}selected{%endif%} value="250000000"> Dưới 500 triệu</option>
-                                            <option {%if priceSelected == 2%}selected{%endif%} value="650000000">500-800 triệu</option>
-                                            <option {%if priceSelected == 3%}selected{%endif%} value="900000000">800-1 tỷ</option>
-                                            <option {%if priceSelected == 4%}selected{%endif%} value="2000000000">1-3 tỷ</option>
-                                            <option {%if priceSelected == 5%}selected{%endif%} value="4000000000">3-5 tỷ</option>
-                                            <option {%if priceSelected == 6%}selected{%endif%} value="6000000000">5-7 tỷ</option>
-                                            <option {%if priceSelected == 7%}selected{%endif%} value="8500000000">7-10 tỷ</option>
-                                            <option {%if priceSelected == 8%}selected{%endif%} value="15000000000">10-20 tỷ</option>
-                                            <option {%if priceSelected == 9%}selected{%endif%} value="25000000000">20-30 tỷ</option>
-                                            <option {%if priceSelected == 10%}selected{%endif%} value="50000000000">Trên 30 tỷ</option>
+                                            <option value="0">
+                                                Thỏa thuận
+                                            </option>
+                                            <option value="250000000">
+                                                Dưới 500 triệu
+                                            </option>
+                                            <option value="650000000">
+                                                500-800 triệu
+                                            </option>
+                                            <option value="900000000">
+                                                800-1 tỷ
+                                            </option>
+                                            <option value="2000000000">
+                                                1-3 tỷ
+                                            </option>
+                                            <option value="4000000000">
+                                                3-5 tỷ
+                                            </option>
+                                            <option value="6000000000">
+                                                5-7 tỷ
+                                            </option>
+                                            <option value="8500000000">
+                                                7-10 tỷ
+                                            </option>
+                                            <option value="15000000000">
+                                                10-20 tỷ
+                                            </option>
+                                            <option value="25000000000">
+                                                20-30 tỷ
+                                            </option>
+                                            <option value="50000000000">
+                                                Trên 30 tỷ
+                                            </option>
                                         </select>
-                                        <label class="font-weight-bold" for="priceUp"
-                                            >Ưu tiên giá (<span class="text-danger" id="slider_label_price"
-                                                >{%if priceUp%}{{priceUp}}{%endif%}</span
+                                        <label
+                                            class="font-weight-bold"
+                                            for="priceUp"
+                                            >Ưu tiên giá (<span
+                                                class="text-danger"
+                                                id="slider_label_price"
+                                                >1</span
                                             >)</label
                                         >
                                         <input
@@ -173,33 +212,59 @@
                                             min="1"
                                             max="5"
                                             step="1"
-                                            value={%if priceUp%}{{priceUp}}{%endif%}
+                                            value="1"
                                             id="priceUp"
                                             name="priceUp"
                                         />
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label class="font-weight-bold" for="area">Diện tích</label>
+                                        <label
+                                            class="font-weight-bold"
+                                            for="area"
+                                            >Diện tích</label
+                                        >
                                         <select
                                             class="form-control"
                                             id="area"
                                             name="area"
                                         >
-                                            <option {%if areaSelected == 0%}selected{%endif%} value="0">Chưa xác định</option>
-                                            <option {%if areaSelected == 1%}selected{%endif%} value="25">Dưới 30 m²</option>
-                                            <option {%if areaSelected == 2%}selected{%endif%} value="40">30-50 m²</option>
-                                            <option {%if areaSelected == 3%}selected{%endif%} value="60">50-70 m²</option>
-                                            <option {%if areaSelected == 4%}selected{%endif%} value="85">70-100 m²</option>
-                                            <option {%if areaSelected == 5%}selected{%endif%} value="125">100-150 m²</option>
-                                            <option {%if areaSelected == 6%}selected{%endif%} value="175">150-200 m²</option>
-                                            <option {%if areaSelected == 7%}selected{%endif%} value="250">200-300 m²</option>
-                                            <option {%if areaSelected == 8%}selected{%endif%} value="350">200-500 m²</option>
-                                            <option {%if areaSelected == 9%}selected{%endif%} value="750">500-1000 m²</option>
-                                            <option {%if areaSelected == 10%}selected{%endif%} value="1200">Trên 1000 m²</option>
+                                            <option value="0">
+                                                Chưa xác định
+                                            </option>
+                                            <option value="25">
+                                                Dưới 30 m²
+                                            </option>
+                                            <option value="40">30-50 m²</option>
+                                            <option value="60">50-70 m²</option>
+                                            <option value="85">
+                                                70-100 m²
+                                            </option>
+                                            <option value="125">
+                                                100-150 m²
+                                            </option>
+                                            <option value="175">
+                                                150-200 m²
+                                            </option>
+                                            <option value="250">
+                                                200-300 m²
+                                            </option>
+                                            <option value="350">
+                                                200-500 m²
+                                            </option>
+                                            <option value="750">
+                                                500-1000 m²
+                                            </option>
+                                            <option value="1200">
+                                                Trên 1000 m²
+                                            </option>
                                         </select>
-                                        <label class="font-weight-bold" for="areaUp"
-                                            >Ưu tiên diện tích (<span class="text-danger" id="slider_label_area"
-                                                >{%if areaUp%}{{areaUp}}{%endif%}</span
+                                        <label
+                                            class="font-weight-bold"
+                                            for="areaUp"
+                                            >Ưu tiên diện tích (<span
+                                                class="text-danger"
+                                                id="slider_label_area"
+                                                >1</span
                                             >)</label
                                         >
                                         <input
@@ -208,33 +273,43 @@
                                             min="1"
                                             max="5"
                                             step="1"
-                                            value={%if areaUp%}{{areaUp}}{%endif%}
+                                            value="1"
                                             id="areaUp"
                                             name="areaUp"
                                         />
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label class="font-weight-bold" for="floors">Số tầng</label>
+                                        <label
+                                            class="font-weight-bold"
+                                            for="floors"
+                                            >Số tầng</label
+                                        >
                                         <select
                                             class="form-control"
                                             id="floors"
                                             name="floors"
                                         >
-                                            <option {%if floorsSelected == 0%}selected{%endif%} value="0">Chưa xác định</option>
-                                            <option {%if floorsSelected == 1%}selected{%endif%} value="1">1</option>
-                                            <option {%if floorsSelected == 2%}selected{%endif%} value="2">2</option>
-                                            <option {%if floorsSelected == 3%}selected{%endif%} value="3">3</option>
-                                            <option {%if floorsSelected == 4%}selected{%endif%} value="4">4</option>
-                                            <option {%if floorsSelected == 5%}selected{%endif%} value="5">5</option>
-                                            <option {%if floorsSelected == 6%}selected{%endif%} value="6">6</option>
-                                            <option {%if floorsSelected == 7%}selected{%endif%} value="7">7</option>
-                                            <option {%if floorsSelected == 8%}selected{%endif%} value="8">8</option>
-                                            <option {%if floorsSelected == 9%}selected{%endif%} value="9">9</option>
-                                            <option {%if floorsSelected == 10%}selected{%endif%} value="10">9+</option>
+                                            <option value="0">
+                                                Chưa xác định
+                                            </option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">9+</option>
                                         </select>
-                                        <label class="font-weight-bold" for="floorsUp"
-                                            >Ưu tiên tầng (<span class="text-danger" id="slider_label_floors"
-                                                >{%if floorsUp%}{{floorsUp}}{%endif%}</span
+                                        <label
+                                            class="font-weight-bold"
+                                            for="floorsUp"
+                                            >Ưu tiên tầng (<span
+                                                class="text-danger"
+                                                id="slider_label_floors"
+                                                >1</span
                                             >)</label
                                         >
                                         <input
@@ -243,13 +318,15 @@
                                             min="1"
                                             max="5"
                                             step="1"
-                                            value={%if floorsUp%}{{floorsUp}}{%endif%}
+                                            value="1"
                                             id="floorsUp"
                                             name="floorsUp"
                                         />
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label class="font-weight-bold" for="bedrooms"
+                                        <label
+                                            class="font-weight-bold"
+                                            for="bedrooms"
                                             >Số phòng ngủ</label
                                         >
                                         <select
@@ -257,21 +334,27 @@
                                             id="bedrooms"
                                             name="bedrooms"
                                         >
-                                            <option {%if bedroomsSelected == 0%}selected{%endif%} value="0">Chưa xác định</option>
-                                            <option {%if bedroomsSelected == 1%}selected{%endif%} value="1">1</option>
-                                            <option {%if bedroomsSelected == 2%}selected{%endif%} value="2">2</option>
-                                            <option {%if bedroomsSelected == 3%}selected{%endif%} value="3">3</option>
-                                            <option {%if bedroomsSelected == 4%}selected{%endif%} value="4">4</option>
-                                            <option {%if bedroomsSelected == 5%}selected{%endif%} value="5">5</option>
-                                            <option {%if bedroomsSelected == 6%}selected{%endif%} value="6">6</option>
-                                            <option {%if bedroomsSelected == 7%}selected{%endif%} value="7">7</option>
-                                            <option {%if bedroomsSelected == 8%}selected{%endif%} value="8">8</option>
-                                            <option {%if bedroomsSelected == 9%}selected{%endif%} value="9">9</option>
-                                            <option {%if bedroomsSelected == 10%}selected{%endif%} value="10">9+</option>
+                                            <option value="0">
+                                                Chưa xác định
+                                            </option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">9+</option>
                                         </select>
-                                        <label class="font-weight-bold" for="bedroomsUp"
-                                            >Ưu tiên phòng ngủ (<span class="text-danger" id="slider_label_beds"
-                                                >{%if bedroomsUp%}{{bedroomsUp}}{%endif%}</span
+                                        <label
+                                            class="font-weight-bold"
+                                            for="bedroomsUp"
+                                            >Ưu tiên phòng ngủ (<span
+                                                class="text-danger"
+                                                id="slider_label_beds"
+                                                >1</span
                                             >)</label
                                         >
                                         <input
@@ -280,13 +363,15 @@
                                             min="1"
                                             max="5"
                                             step="1"
-                                            value={%if bedroomsUp%}{{bedroomsUp}}{%endif%}
+                                            value="1"
                                             id="bedroomsUp"
                                             name="bedroomsUp"
                                         />
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label class="font-weight-bold" for="direction"
+                                        <label
+                                            class="font-weight-bold"
+                                            for="direction"
                                             >Hướng nhà</label
                                         >
                                         <select
@@ -294,19 +379,25 @@
                                             id="direction"
                                             name="direction"
                                         >
-                                            <option {%if directionSelected == 0%}selected{%endif%} value="0">Chưa xác định</option>
-                                            <option {%if directionSelected == 1%}selected{%endif%} value="1">Đông</option>
-                                            <option {%if directionSelected == 2%}selected{%endif%} value="2">Tây</option>
-                                            <option {%if directionSelected == 3%}selected{%endif%} value="3">Nam</option>
-                                            <option {%if directionSelected == 4%}selected{%endif%} value="4">Bắc</option>
-                                            <option {%if directionSelected == 5%}selected{%endif%} value="5">Đông-Bắc</option>
-                                            <option {%if directionSelected == 6%}selected{%endif%} value="6">Tây-Bắc</option>
-                                            <option {%if directionSelected == 7%}selected{%endif%} value="7">Đông-Nam</option>
-                                            <option {%if directionSelected == 8%}selected{%endif%} value="8">Tây-Nam</option>
+                                            <option value="0">
+                                                Chưa xác định
+                                            </option>
+                                            <option value="1">Đông</option>
+                                            <option value="2">Tây</option>
+                                            <option value="3">Nam</option>
+                                            <option value="4">Bắc</option>
+                                            <option value="5">Đông-Bắc</option>
+                                            <option value="6">Tây-Bắc</option>
+                                            <option value="7">Đông-Nam</option>
+                                            <option value="8">Tây-Nam</option>
                                         </select>
-                                        <label class="font-weight-bold" for="directionUp"
-                                            >Ưu tiên hướng nhà (<span class="text-danger" id="slider_label_direc"
-                                                >{%if directionUp%}{{directionUp}}{%endif%}</span
+                                        <label
+                                            class="font-weight-bold"
+                                            for="directionUp"
+                                            >Ưu tiên hướng nhà (<span
+                                                class="text-danger"
+                                                id="slider_label_direc"
+                                                >1</span
                                             >)</label
                                         >
                                         <input
@@ -315,7 +406,7 @@
                                             min="1"
                                             max="5"
                                             step="1"
-                                            value={%if directionUp%}{{directionUp}}{%endif%}
+                                            value="1"
                                             id="directionUp"
                                             name="directionUp"
                                         />
@@ -324,7 +415,9 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <div class="input-group-text font-weight-bold">
+                                            <div
+                                                class="input-group-text font-weight-bold"
+                                            >
                                                 Địa điểm lân cận
                                             </div>
                                         </div>
@@ -333,8 +426,8 @@
                                             class="form-control"
                                             id="placesNearby"
                                             name="placesNearby"
+                                            value="Nhà hàng, quán cà phê, công viên"
                                             placeholder="Nhà hàng, quán cà phê, công viên"
-                                            value="{%if placesNearby%}{{placesNearby}}{%endif%}"
                                             required
                                         />
                                     </div>
@@ -347,7 +440,7 @@
                                 </div>
                                 <div class="text-center">
                                     <button
-                                        type="submit"
+                                        type="button"
                                         class="btn btn-info"
                                         id="button-submit"
                                     >
@@ -359,94 +452,26 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-5">
+            <div class="row mt-5" id="result">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <style>
                         #map {
-                            width: 100%;
-                            height: 355px;
-                            margin-top: 1rem!important;
-                            border-radius: .25rem;
+                            height: 350px;
+                            margin-top: 1rem !important;
+                            border-radius: 0.25rem;
+                            margin-left: 5px;
+                            margin-right: 5px;
                         }
                     </style>
-                    <span class="title-custom {{titleMap}}">
-                        Đây là những ngôi nhà chúng tôi đang bán!
-                    </span>
-                    <div id="{{result}}"></div>
-                    {%if data != "empty"%}
                     <span class="title-custom">
-                        Thật tuyệt vời có 5 gợi ý tốt nhất cho bạn rồi!
+                        Đây là những ngôi nhà chúng tôi đang bán! 😋
                     </span>
-                    <div class="card-wrapper mt-3">
-                        {%for home in range(0, 5)%}
-                        <a class="link-custom" target="_blank" href="./detail/{{data[home][0]}}">
-                            <div class="card card-custom card-item">
-                                <div class="image-item">
-                                    <div class="address-item">
-                                        <span class="single-address"
-                                            ><i class="fas fa-map-marker-alt"></i>
-                                            {{(data[home][7])[0:27]}}...</span
-                                        >
-                                    </div>
-                                    <img
-                                        src="{{data[home][9].split(',')[0].split("'")[1]}}"
-                                        class="card-img-top"
-                                        alt="{{data[home][8][0]}}"
-                                    />
-                                </div>
-                                <div class="card-body card-body-custom">
-                                    <div class="card-text">
-                                        <div class="title-item">
-                                            {{(data[home][1])[0:60]}}...
-                                        </div>
-                                        <div class="info-item">
-                                            <div class="single-item">
-                                                <i class="fas fa-dollar-sign"></i>
-                                                <span class="prop-item">{{data[home][2]}}</span>
-                                            </div>
-                                            <div class="single-item">
-                                                <i
-                                                    class="fas fa-ruler-combined"
-                                                ></i>
-                                                <span class="prop-item"
-                                                    >{{data[home][3]}}</span
-                                                >
-                                            </div>
-                                            <div class="single-item">
-                                                <i
-                                                    class="fas fa-building"
-                                                ></i>
-                                                <span class="prop-item"
-                                                    >{{data[home][5]}}</span
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="info-item">
-                                            <div class="single-item">
-                                                <i class="fas fa-bed"></i>
-                                                <span class="prop-item"
-                                                    >{{data[home][4]}}</span
-                                                >
-                                            </div>
-                                            <div class="single-item">
-                                                <i class="fas fa-compass"></i>
-                                                <span class="prop-item"
-                                                    >{{data[home][6]}}</span
-                                                >
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        {%endfor%}
-                    </div>
-                    {%endif%}
+                    <div id="map"></div>
                     <!-- Hiển thị tất cả nhà trên bản đồ -->
                     <script>
                         mapboxgl.accessToken =
                             "pk.eyJ1IjoidnVseXRoaWVuYW5oIiwiYSI6ImNrZXlhNXd3ZDBkb2Myd3AzYWRxaXhodnIifQ.de-6twccJ_8Jte2Iy5xVqg";
-                        
+
                             var map = new mapboxgl.Map({
                             container: "map",
                             style: "mapbox://styles/mapbox/streets-v11",
@@ -461,7 +486,7 @@
                             .setHTML('<h6><a target="_blank" href="./detail/{{dataRaw[local][0]}}">' + '{{(dataRaw[local][1])[0:40]}}...' + '</a></h6><p>' + 'Giá: {{dataRaw[local][2]}} | Diện tích: {{dataRaw[local][3]}}' + '</p><p>'+ 'Số PN: {{dataRaw[local][4]}} | Số Tầng: {{dataRaw[local][5]}}' +'</p><p>'+'Hướng nhà: {{dataRaw[local][6]}}'+'</p>'))
                             .addTo(map);
                         {%endfor%};
-                        
+
                         // Add geolocate control to the map.
                         map.addControl(
                             new mapboxgl.GeolocateControl({
@@ -473,9 +498,6 @@
                         );
                     </script>
                     <!-- END - Hiển thị tất cả nhà trên bản đồ -->
-                    <{{warning}}>
-                        alert("Quận huyện bạn chọn không tồn tại bản tin nào");
-                    </{{warning}}>
                 </div>
             </div>
         </div>
@@ -500,5 +522,7 @@
             crossorigin="anonymous"
         ></script>
         <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <script src="{{ url_for('static', filename='js/resultAjax.js') }}"></script>
     </body>
 </html>

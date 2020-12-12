@@ -1,6 +1,12 @@
-[![Fihp Logo](https://www.upsieutoc.com/images/2020/12/10/fiho.png)](http://fiho.ml/)
+[![Fiho Logo](https://www.upsieutoc.com/images/2020/12/10/fiho.png)](http://fiho.ml/)
 
 A project of my dissertation to find home for people in Can Tho City with many properties of house and places nearby.
+
+---
+
+## FIHO - Find Home
+
+![Fiho Logo](https://www.upsieutoc.com/images/2020/12/12/fiho.jpg)
 
 ---
 
