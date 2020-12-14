@@ -22,7 +22,3 @@ $(document).on("input", "#directionUp", function () {
     var coins = $("#directionUp").val();
     $("#slider_label_direc").text(coins);
 });
-
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip();
-});

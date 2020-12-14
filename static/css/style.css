@@ -11,7 +11,8 @@ body {
     width: 100%;
     position: absolute;
     filter: blur(7px);
-    background-image: url("http://haianh.ml/z2104758879820_1d116127057e6960d4d07c261d68e817.jpg");
+    /* background-image: url("http://haianh.ml/z2104758879820_1d116127057e6960d4d07c261d68e817.jpg"); */
+    background-image: url("../background.jpg");
 }
 
 .navbar-brand {

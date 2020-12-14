@@ -1,0 +1,106 @@
+{% extends './admin/base.html' %} {% block content %}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Dữ liệu lượt nhấn xem</h1>
+    <p class="mb-4">Danh sách tất cả các lần nhấn xem của người dùng</p>
+
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                Dữ liệu để đánh giá hệ thống {% with messages =
+                get_flashed_messages() %} {% if messages %} {% for message in
+                messages %}
+                <span class="text-danger">({{message}})</span>
+                {% endfor %} {% endif %} {% endwith %}
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table
+                    class="table table-bordered table-striped"
+                    id="dataTable"
+                    width="100%"
+                    cellspacing="0"
+                >
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Phiên làm việc</th>
+                            <th>TOP 1</th>
+                            <th>TOP 2</th>
+                            <th>TOP 3</th>
+                            <th>TOP 4</th>
+                            <th>TOP 5</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Phiên làm việc</th>
+                            <th>TOP 1</th>
+                            <th>TOP 2</th>
+                            <th>TOP 3</th>
+                            <th>TOP 4</th>
+                            <th>TOP 5</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        {%for i in range(0,lenRating)%}
+                        <tr>
+                            <td>{{rating[i][0]}}</td>
+                            <td>{{rating[i][1]}}</td>
+                            {%if rating[i][2] == 1%}
+                            <td class="bg-danger text-white font-weight-bold">
+                                {{rating[i][2]}}
+                            </td>
+                            {%else%}
+                            <td class="bg-dark text-white font-weight-bold">
+                                {{rating[i][2]}}
+                            </td>
+                            {%endif%} {%if rating[i][3] == 1%}
+                            <td class="bg-danger text-white font-weight-bold">
+                                {{rating[i][3]}}
+                            </td>
+                            {%else%}
+                            <td class="bg-dark text-white font-weight-bold">
+                                {{rating[i][3]}}
+                            </td>
+                            {%endif%} {%if rating[i][4] == 1%}
+                            <td class="bg-danger text-white font-weight-bold">
+                                {{rating[i][4]}}
+                            </td>
+                            {%else%}
+                            <td class="bg-dark text-white font-weight-bold">
+                                {{rating[i][4]}}
+                            </td>
+                            {%endif%} {%if rating[i][5] == 1%}
+                            <td class="bg-danger text-white font-weight-bold">
+                                {{rating[i][5]}}
+                            </td>
+                            {%else%}
+                            <td class="bg-dark text-white font-weight-bold">
+                                {{rating[i][5]}}
+                            </td>
+                            {%endif%} {%if rating[i][6] == 1%}
+                            <td class="bg-danger text-white font-weight-bold">
+                                {{rating[i][6]}}
+                            </td>
+                            {%else%}
+                            <td class="bg-dark text-white font-weight-bold">
+                                {{rating[i][6]}}
+                            </td>
+                            {%endif%}
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+
+{% endblock %}

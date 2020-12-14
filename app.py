@@ -151,7 +151,7 @@ def index():
 
 
 @app.route('/result', methods=['GET', 'POST'])
-def signUpUser():
+def result():
     data = 0
     lenData = 0
     warning = "hide-warning"
@@ -189,6 +189,68 @@ def signUpUser():
         resultWarning = "hide-warning"
 
     return render_template('result.html', warning=warning, resultWarning=resultWarning, lenData=lenData, data=data)
+
+
+@app.route('/rating', methods=['GET', 'POST'])
+def rating():
+    clicked = None
+    clicked = request.json
+
+    top = clicked['top']
+    sessionTop = clicked['sessionTop']
+
+    conn = sqlite3.connect("./database/fiho.db")
+
+    # Kiểm tra tồn tại session trong csdl chưa
+    checkSession = conn.execute(
+        "SELECT * FROM rating WHERE session = '"+sessionTop+"'")
+
+    existSesion = ""
+    for s in checkSession:
+        existSesion = s
+
+    # Nếu tồn tại thì update
+    if existSesion:
+        if(top == "1"):
+            conn.execute(
+                "UPDATE rating SET top1 = 1 WHERE session = '"+sessionTop+"'")
+        if(top == "2"):
+            conn.execute(
+                "UPDATE rating SET top2 = 1 WHERE session = '"+sessionTop+"'")
+        if(top == "3"):
+            conn.execute(
+                "UPDATE rating SET top3 = 1 WHERE session = '"+sessionTop+"'")
+        if(top == "4"):
+            conn.execute(
+                "UPDATE rating SET top4 = 1 WHERE session = '"+sessionTop+"'")
+        if(top == "5"):
+            conn.execute(
+                "UPDATE rating SET top5 = 1 WHERE session = '"+sessionTop+"'")
+
+        conn.commit()
+    # Ngược lại thì tạo mới
+    else:
+        paramsSession = (str(sessionTop), str(1))
+
+        if(top == "1"):
+            conn.execute(
+                "INSERT INTO rating (session, top1) VALUES (?,?)", paramsSession)
+        if(top == "2"):
+            conn.execute(
+                "INSERT INTO rating (session, top2) VALUES (?,?)", paramsSession)
+        if(top == "3"):
+            conn.execute(
+                "INSERT INTO rating (session, top3) VALUES (?,?)", paramsSession)
+        if(top == "4"):
+            conn.execute(
+                "INSERT INTO rating (session, top4) VALUES (?,?)", paramsSession)
+        if(top == "5"):
+            conn.execute(
+                "INSERT INTO rating (session, top5) VALUES (?,?)", paramsSession)
+
+        conn.commit()
+    conn.close()
+    return clicked
 
 
 @app.route("/detail/<id>")
@@ -1098,6 +1160,18 @@ def add_file_addition():
             return redirect(url_for('add_file_addition'))
 
     return render_template('admin/add-file-addition.html')
+
+
+@app.route("/admin/rating", methods=['GET', 'POST'])
+def admin_rating():
+    conn = sqlite3.connect("./database/fiho.db")
+    query = "SELECT * FROM rating"
+    cursor = conn.execute(query)
+    rating = []
+    for row in cursor:
+        rating.append(list(row))
+    conn.close()
+    return render_template('admin/rating.html', rating=rating,lenRating = len(rating))
 
 
 if __name__ == "__main__":
