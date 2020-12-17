@@ -1,10 +1,11 @@
-from flask import Flask, request, jsonify, url_for, render_template, redirect, flash, send_file
+from flask import Flask, request, jsonify, url_for, render_template, redirect, flash, send_file, session
 import pandas as pd
 import sqlite3
 import random
 import math
 import json
 import os
+import uuid
 from datetime import datetime
 from tabulate import tabulate
 from slugify import slugify, Slugify, UniqueSlugify
@@ -1255,6 +1256,39 @@ def admin_rating():
         rating.append(list(row))
     conn.close()
     return render_template('admin/rating.html', rating=rating, lenRating=len(rating))
+
+
+@app.route("/admin/login", methods=['GET', 'POST'])
+def admin_login():
+    username = ""
+    password = ""
+    check = ""
+    name = ""
+    conn = sqlite3.connect("./database/fiho.db")
+
+    if request.method == "POST":
+        username = request.form['username']
+        password = request.form['password']
+
+        info = (username, password)
+
+        # query = "SELECT username,password FROM user WHERE username =" + username +"AND password = " + password
+        cursor = conn.execute(
+            """SELECT ID,username,name FROM users WHERE username = (?) AND password = (?)""", info)
+
+        for i in cursor:
+            check = i[0]
+            name = i[2]
+
+        if(len(str(check)) > 0):
+            return redirect(url_for('admin', name=name))
+        else:
+            flash('Tài khoản hoặc mật khẩu không chính xác!')
+
+    conn.commit()
+    conn.close()
+
+    return render_template('admin/login.html')
 
 
 if __name__ == "__main__":
