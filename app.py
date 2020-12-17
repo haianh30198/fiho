@@ -1,10 +1,13 @@
 from flask import Flask, request, jsonify, url_for, render_template, redirect, flash, send_file
 import pandas as pd
 import sqlite3
+import random
+import math
 import json
 import os
 from datetime import datetime
 from tabulate import tabulate
+from slugify import slugify, Slugify, UniqueSlugify
 import pytz
 from sklearn.metrics.pairwise import cosine_similarity
 from recommend.data_of_user import newData
@@ -14,6 +17,7 @@ from recommend.data_of_system import createFileData
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
+# Vị trị lưu file upload của thêm file gợi ý
 UPLOAD_FOLDER = 'data/rawAddition/'
 ALLOWED_EXTENSIONS = {'xlxs', 'csv'}
 
@@ -52,7 +56,7 @@ except:
     # location
     location = pd.read_csv('./data/location/location.csv')
 
-# Định dạng tên file
+# Định dạng tên file có ngày giờ
 
 
 def format_file_name(name):
@@ -81,6 +85,7 @@ def recommend(district, price, priceUp, area, areaUp, bedrooms, bedroomsUp, floo
 
     # Lọc data theo quận của người dùng
     systemDistrict = filterDistrict(system, district)
+    # Sau khi lọc nhân thêm độ ưu tiên của người dùng vào bảng vector
     systemDistrict = priority(price, 'price', priceUp, systemDistrict)
     systemDistrict = priority(area, 'area', areaUp, systemDistrict)
     systemDistrict = priority(bedrooms, 'bedrooms', bedroomsUp, systemDistrict)
@@ -90,6 +95,7 @@ def recommend(district, price, priceUp, area, areaUp, bedrooms, bedroomsUp, floo
 
     # Data người dùng nhập
     user = newData(price, area, bedrooms, floors, direction, placesNearBy)
+    # Nhân thêm độ ưu tiên cho các thuộc tính
     user = priority(price, 'price', priceUp, user)
     user = priority(area, 'area', areaUp, user)
     user = priority(bedrooms, 'bedrooms', bedroomsUp, user)
@@ -114,7 +120,9 @@ def recommend(district, price, priceUp, area, areaUp, bedrooms, bedroomsUp, floo
     # Thêm cột Similar
     dataResult['Similar'] = sim
 
+    # Nối 2 data theo ID
     dataResult = pd.merge(dataRaw, dataResult, on=['ID'])
+    # Lấy ra các thuộc tính cần thiết
     dataResult = dataResult[['ID', 'Title', 'Price', 'Area',
                              'Bedrooms', 'Floors', 'Direction', 'Address', 'District', 'Images', 'Phone', 'Description', 'Similar']]
 
@@ -131,15 +139,20 @@ def recommend(district, price, priceUp, area, areaUp, bedrooms, bedroomsUp, floo
 
     return dataResult.head()
 
+# Xử lý các route ko tồn tại trả về trang 404
+
 
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('404.html'), 404
 
+# Trang chủ khi mới tải trang
+
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
+    # Hiển thị các địa điểm đang được rao bán trên bản đồ theo dữ liệu location
     locationAll = []
 
     for i in range(0, len(location.index)):
@@ -148,6 +161,8 @@ def index():
     lengthLocation = len(locationAll)
 
     return render_template('index2.html', locationAll=locationAll, lengthLocation=lengthLocation, dataRaw=dataRaw.values.tolist())
+
+# Trang nhận kết quả và dùng ajax hiển thị thay cho bản đồ các địa điểm đang rao bán
 
 
 @app.route('/result', methods=['GET', 'POST'])
@@ -171,6 +186,7 @@ def result():
 
     # print(placesNearby)
     try:
+        # Nhận các yêu cầu và xử lý đưa ra gợi ý
         rs = recommend(int(district), int(price), int(priceUp), float(area), int(areaUp), int(bedrooms), int(
             bedroomsUp), int(floors), int(floorsUp), int(direction), int(directionUp), placesNearby)
         print("===========================================================================TOP 5 GỢI Ý TỐT NHẤT===========================================================================\n")
@@ -189,6 +205,8 @@ def result():
         resultWarning = "hide-warning"
 
     return render_template('result.html', warning=warning, resultWarning=resultWarning, lenData=lenData, data=data)
+
+# Theo dõi lượt click theo session
 
 
 @app.route('/rating', methods=['GET', 'POST'])
@@ -252,22 +270,43 @@ def rating():
     conn.close()
     return clicked
 
+# Trang chi tiết nhà
+
 
 @app.route("/detail/<id>")
 def detail(id):
+    # Lọc dữ liệu theo id để đưa ra dòng dữ liệu tương ứng với ngôi nhà
     for i in range(len(dataRaw.index)):
         if(dataRaw.iloc[i][0] == id):
             detail = dataRaw.iloc[i]
 
-    latA, longA = locationFromAddress(
-        detail.values[7])  # Lấy kinh vĩ độ từ địa chỉ
+    # Lấy kinh vĩ độ từ địa chỉ
+    latA, longA = locationFromAddress(detail.values[7])
 
     detail = detail.copy()
 
-    detail['longitude'] = longA
-    detail['latitude'] = latA
+    detail['longitude'] = longA  # Kinh độ
+    detail['latitude'] = latA  # Vĩ độ
     # print(type(detail[4]))
-    return render_template('detail.html', detail=detail)
+
+    # Lấy ngẫu nhiên 3 nhà khác
+    detail1 = ""
+    detail2 = ""
+    detail3 = ""
+
+    random1 = random.choice(dataRaw['ID'])
+    random2 = random.choice(dataRaw['ID'])
+    random3 = random.choice(dataRaw['ID'])
+
+    for i in range(len(dataRaw.index)):
+        if(dataRaw.iloc[i][0] == random1):
+            detail1 = dataRaw.iloc[i]
+        if(dataRaw.iloc[i][0] == random2):
+            detail2 = dataRaw.iloc[i]
+        if(dataRaw.iloc[i][0] == random3):
+            detail3 = dataRaw.iloc[i]
+
+    return render_template('detail.html', detail=detail, detail1=detail1, detail2=detail2, detail3=detail3)
 
 
 # Xây dưng trang admin
@@ -280,8 +319,51 @@ def admin():
     userCursor = conn.execute(userQuery)
     for user in userCursor:
         userResult = user[0]
+
+    # Thống kế số lượng quận trong tất cả bản tin hiện tại
+    districtList = ['Ninh Kiều', 'Cái Răng', 'Bình Thủy', 'Ô Môn',
+                    'Thốt Nốt', 'Vĩnh Thạnh', 'Thới Lai', 'Cờ Đỏ', 'Phong Điền']
+
+    colorList = ["#00876c", "#57a18b", "#8cbcac", "#bed6ce",
+                 "#f1f1f1", "#f1c6c6", "#ec9c9d", "#e27076", "#d43d51"]
+
+    rowData = len(dataRaw.index)
+
+    addressData = dataRaw['Address']
+
+    addresses = []  # Mảng chứa tất cả các quận đã tách
+    for i in range(rowData):
+        addresses.append("Không rõ")
+
+    for addInData in range(0, rowData):
+        for dis in districtList:
+            if(slugify(addressData[addInData], to_lower=True).find(slugify(dis, to_lower=True)) != -1):
+                addresses[addInData] = dis
+
+    dataDis = dataRaw.copy()
+    dataDis['District'] = addresses
+
+    # Đếm quận
+    def countDistrict(district):
+        return sum(dataDis['District'].str.count(district))
+
+    dataCountDistrict = []
+
+    for dis in districtList:
+        dataCountDistrict.append(countDistrict(dis))
+
+    # Thống kế lượt click trên kết quả hiển thị
+    clickQuery = "SELECT COUNT(session), sum(top1), sum(top2), sum(top3), sum(top4), sum(top5) FROM rating"
+    clickCursor = conn.execute(clickQuery)
+    for click in clickCursor:
+        clickResult = click
+
+    topClick = []
+    for i in range(1, 6):
+        topClick.append(str(math.ceil(clickResult[i]/clickResult[0]*100)))
+
     conn.close()
-    return render_template('admin/index.html', userResult=userResult, dataRaw=dataRaw, recommendAmount=len(dataRaw.index))
+    return render_template('admin/index.html', userResult=userResult, dataRaw=dataRaw, recommendAmount=len(dataRaw.index), dataCountDistrict=dataCountDistrict, districtList=districtList, colorList=colorList, topClick=topClick, clickResult=clickResult)
 
 
 @app.route("/admin/users")  # Hiển thị thành viên
@@ -379,7 +461,7 @@ def detail_file(id):
     print(id)
     return render_template('admin/detail-file.html', dataRaw=dataRaw)
 
-# Thu thập dữ liệu BDSVN
+# Thu thập dữ liệu
 
 
 @app.route("/admin/files/system/crawl", methods=['GET', 'POST'])
@@ -1058,6 +1140,7 @@ def system_active():
     dfCreateMap.to_csv(mapRecommend, index=False,
                        header=True, encoding='utf-8-sig')
 
+    # Định dạng ngày giờ để lưu
     vietnam = pytz.timezone('Asia/Ho_Chi_Minh')
     timeA = datetime.now(vietnam).strftime("%H:%M:%S")
     timeB = datetime.now(vietnam).date()
@@ -1171,7 +1254,7 @@ def admin_rating():
     for row in cursor:
         rating.append(list(row))
     conn.close()
-    return render_template('admin/rating.html', rating=rating,lenRating = len(rating))
+    return render_template('admin/rating.html', rating=rating, lenRating=len(rating))
 
 
 if __name__ == "__main__":

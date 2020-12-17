@@ -39,7 +39,7 @@ def createFileData(data_path, vector_data_path):
             if(slugify(addressData[addInData], to_lower=True).find(slugify(dis, to_lower=True)) != -1):
                 addresses[addInData] = dis
 
-            # B2 - thêm cột và lưu giá trị các quận tương ứng
+    # B2 - thêm cột và lưu giá trị các quận tương ứng
     dataProcess['District'] = addresses
 
     # B3 - đổi các quận thành số để dễ sử dụng

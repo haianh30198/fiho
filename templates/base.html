@@ -71,7 +71,9 @@
                         >
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.html">Về tôi</a>
+                        <a class="nav-link" target="_blank" href="/about"
+                            >Về tôi</a
+                        >
                     </li>
                     <li class="nav-item dropdown">
                         <a
@@ -107,7 +109,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="/admin"
+                        <a class="nav-link" target="_blank" href="/admin"
                             >Trang quản lý</a
                         >
                     </li>
@@ -115,10 +117,7 @@
             </div>
         </nav>
         <!-- END - Navbar -->
-        <div
-            class="container-fuild mb-5 pb-5"
-            style="margin-left: 13rem; margin-right: 13rem"
-        >
+        <div class="container mb-5 pb-5" style="max-width: 1500px !important">
             <div class="row">{% block content %}{% endblock %}</div>
         </div>
         <!-- Footer -->

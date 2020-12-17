@@ -202,3 +202,32 @@ html {
 .table-size {
     width: 50%;
 }
+
+.wrapper-random {
+    position: relative;
+}
+
+.random-house {
+    position: absolute;
+    padding: 5px;
+    background: rgb(0 0 0 / 50%);
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+.random-house > img {
+    height: 100%;
+}
+
+.random-house-bottom {
+    position: absolute;
+    padding: 5px;
+    background: rgb(0 0 0 / 50%);
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    bottom: -1rem;
+}

@@ -6,3 +6,7 @@
 .custom-wrapper-upload {
     position: relative;
 }
+
+.chart-pie {
+    height: calc(18rem - 40px) !important;
+}

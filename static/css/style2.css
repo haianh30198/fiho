@@ -34,6 +34,10 @@ body {
     margin-left: 13rem;
 }
 
+.container {
+    max-width: 1500px !important;
+}
+
 .card-wrapper {
     display: flex;
     justify-content: space-evenly;
@@ -65,6 +69,10 @@ html {
 .card-custom {
     width: 288px;
     overflow: hidden;
+}
+
+.card {
+    border-radius: 0;
 }
 
 .image-item {
