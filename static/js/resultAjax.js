@@ -1,5 +1,9 @@
 $(function () {
     $("button").click(function () {
+        $("#loading").show();
+        // setTimeout(function () {
+        //     $("#loading").hide();
+        // }, 1000);
         sessionStorage.setItem("home", uuidv4());
         // var district = $("#district").val();
         // var price = $("#price").val();
@@ -18,6 +22,7 @@ $(function () {
             data: $("form").serialize(),
             type: "POST",
             success: function (response) {
+                $("#loading").hide();
                 document.getElementById("result").innerHTML = response;
                 // console.log(response);
                 $(document).ready(function () {
@@ -33,9 +38,11 @@ $(function () {
                             }),
                             type: "POST",
                             success: function (response) {
+                                // $("#loading").hide();
                                 console.log(response);
                             },
                             error: function (error) {
+                                // $("#loading").hide();
                                 console.log(error);
                             },
                         });

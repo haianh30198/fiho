@@ -103,13 +103,13 @@ def recommend(district, price, priceUp, area, areaUp, bedrooms, bedroomsUp, floo
     user = priority(floors, 'floors', floorsUp, user)
     user = priority(direction, 'directions', directionUp, user)
 
-    # print("==============Dữ liệu hệ thống==============\n")
-    # print(systemDistrict)
-    # print("===========END - Dữ liệu hệ thống===========\n")
+    print("==============Dữ liệu hệ thống==============\n")
+    print(systemDistrict)
+    print("===========END - Dữ liệu hệ thống===========\n")
 
-    # print("===========Yêu cầu của người dùng===========\n")
-    # print(user)
-    # print("========END - Yêu cầu của người dùng========\n")
+    print("===========Yêu cầu của người dùng===========\n")
+    print(user)
+    print("========END - Yêu cầu của người dùng========\n")
 
     # Tính độ tương tự
     sim = cosine_similarity(
